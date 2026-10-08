@@ -71,10 +71,7 @@ export default function About() {
               <span className={`w-24 shrink-0 ${isDarkMode ? "text-neutral-400" : "text-neutral-500"}`}>Location</span>
               <span className="font-medium text-right sm:text-left">Italy (Worldwide)</span>
             </div>
-            <div className="flex justify-between sm:justify-start gap-4 pb-2 border-b border-black/[0.04] dark:border-white/[0.04]">
-              <span className={`w-24 shrink-0 ${isDarkMode ? "text-neutral-400" : "text-neutral-500"}`}>Experience</span>
-              <span className="font-medium text-right sm:text-left">4+ Years</span>
-            </div>
+
             <div className="flex justify-between sm:justify-start gap-4 pb-2 border-b border-black/[0.04] dark:border-white/[0.04]">
               <span className={`w-24 shrink-0 ${isDarkMode ? "text-neutral-400" : "text-neutral-500"}`}>Core Stack</span>
               <span className="font-medium text-right sm:text-left">React, Next.js, Node</span>

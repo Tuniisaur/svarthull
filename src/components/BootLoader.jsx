@@ -66,7 +66,7 @@ export default function BootLoader({ onComplete }) {
             className="mt-3.5 text-[11px] font-medium tracking-wider text-neutral-400 select-none"
             style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif" }}
           >
-            SvartHallOS
+            SvartHullOS
           </motion.span>
         </motion.div>
       )}

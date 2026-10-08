@@ -769,22 +769,22 @@ export default function Desktop({ setStage, isLocked = false }) {
           >
             <div className="flex items-start gap-3">
               {/* macOS Squircle App Icon */}
-              <div className="w-10 h-10 rounded-[10px] overflow-hidden shrink-0 flex items-center justify-center bg-black/10 dark:bg-white/5 shadow-md border border-white/10">
+              <div className="w-10 h-10 rounded-[11px] overflow-hidden shrink-0 flex items-center justify-center bg-black/15 dark:bg-white/10 shadow-md border border-white/10 p-2">
                 <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/c/c9/Finder_Icon_macOS_Big_Sur.png"
-                  alt="Finder"
-                  className="w-full h-full object-cover"
+                  src="/icons/logo.svg"
+                  alt="Svart Hull"
+                  className="w-full h-full object-contain filter drop-shadow-sm"
                 />
               </div>
 
               {/* Notification Content */}
               <div className="flex-1 min-w-0 pt-0.5">
                 <div className="flex items-center justify-between gap-1 leading-none">
-                  <span className={`text-[12px] font-bold tracking-tight ${isDarkMode ? "text-white/90" : "text-neutral-900"}`}>
+                  <span className={`text-[12px] font-bold tracking-tight whitespace-nowrap ${isDarkMode ? "text-white/90" : "text-neutral-900"}`}>
                     Dock
                   </span>
-                  <div className="flex items-center gap-1.5 ml-auto">
-                    <span className={`text-[11px] ${isDarkMode ? "text-white/40" : "text-neutral-500"}`}>
+                  <div className="flex items-center gap-1.5 ml-auto shrink-0">
+                    <span className={`text-[11px] whitespace-nowrap ${isDarkMode ? "text-white/40" : "text-neutral-500"}`}>
                       now
                     </span>
                     <button
@@ -802,7 +802,7 @@ export default function Desktop({ setStage, isLocked = false }) {
                   </div>
                 </div>
 
-                <div className={`text-[13px] font-semibold mt-1 tracking-tight leading-tight ${isDarkMode ? "text-white" : "text-neutral-900"}`}>
+                <div className={`text-[13px] font-semibold mt-1 tracking-tight leading-tight whitespace-nowrap truncate ${isDarkMode ? "text-white" : "text-neutral-900"}`}>
                   Navigation & Apps
                 </div>
                 <div className={`text-[12px] mt-1 leading-snug font-normal ${isDarkMode ? "text-white/75" : "text-neutral-600"}`}>

@@ -101,8 +101,35 @@ export default function AppWindow({ window: win }) {
     minimize(win.id);
   };
 
-  // Hide if minimized (keep mounted so audio/video keeps playing)
-  const minimizedStyle = win.minimized ? {
+  // Minimize / restore animation tracking
+  const [isMinimizing, setIsMinimizing] = useState(false);
+  const [isRestoring, setIsRestoring] = useState(false);
+  const prevMinimizedRef = useRef(win.minimized);
+
+  useEffect(() => {
+    if (!prevMinimizedRef.current && win.minimized) {
+      setIsMinimizing(true);
+      setIsRestoring(false);
+      const timer = setTimeout(() => {
+        setIsMinimizing(false);
+      }, 290);
+      prevMinimizedRef.current = win.minimized;
+      return () => clearTimeout(timer);
+    } else if (prevMinimizedRef.current && !win.minimized) {
+      setIsRestoring(true);
+      setIsMinimizing(false);
+      const timer = setTimeout(() => {
+        setIsRestoring(false);
+      }, 330);
+      prevMinimizedRef.current = win.minimized;
+      return () => clearTimeout(timer);
+    }
+    prevMinimizedRef.current = win.minimized;
+  }, [win.minimized]);
+
+  // Hide completely only after minimize animation finishes (keep mounted for audio/video)
+  const isHidden = win.minimized && !isMinimizing;
+  const minimizedStyle = isHidden ? {
     opacity: 0,
     pointerEvents: 'none',
     visibility: 'hidden',
@@ -134,7 +161,7 @@ export default function AppWindow({ window: win }) {
           zIndex: win.z,
         }}
         resizeHandleStyles={resizeHandleStyles}
-        enableResizing={!isMobile ? {
+        enableResizing={!isMobile && !isMinimizing && !isRestoring && !win.minimized ? {
           top: true,
           right: true,
           bottom: true,
@@ -165,7 +192,7 @@ export default function AppWindow({ window: win }) {
             y: position.y,
           });
         }}
-        disableDragging={isMobile || win.maximized}
+        disableDragging={isMobile || win.maximized || isMinimizing || isRestoring}
       >
         <motion.div
           key={win.id}
@@ -178,6 +205,13 @@ export default function AppWindow({ window: win }) {
                   y: 16,
                   transition: { duration: 0.2, ease: [0.32, 0, 0.67, 0] },
                 }
+              : win.minimized || isMinimizing
+              ? {
+                  opacity: 0,
+                  scale: 0.15,
+                  y: isMobile ? 130 : 200,
+                  transition: { duration: 0.28, ease: [0.32, 0, 0.67, 0] },
+                }
               : {
                   opacity: 1,
                   scale: 1,
@@ -185,29 +219,31 @@ export default function AppWindow({ window: win }) {
                   boxShadow: isDragging 
                     ? '0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1)' 
                     : '0 10px 40px -10px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)',
-                  transition: { duration: 0.26, ease: [0.16, 1, 0.3, 1] },
+                  transition: isRestoring 
+                    ? { duration: 0.32, ease: [0.16, 1, 0.3, 1] }
+                    : { duration: 0.26, ease: [0.16, 1, 0.3, 1] },
                 }
           }
-          className={`flex flex-col overflow-hidden ${win.isClosing ? "pointer-events-none " : ""}${
+          className={`flex flex-col overflow-hidden ${win.isClosing || isMinimizing ? "pointer-events-none " : ""}${
             win.maximized ? "rounded-none" : "rounded-xl"
           } ${
             win.appId === "Launchpad"
               ? isDarkMode
-                ? "backdrop-blur-3xl bg-[#1e1e1e]/45 border border-white/10 text-white shadow-2xl"
-                : "backdrop-blur-3xl bg-white/65 border border-black/10 text-gray-900 shadow-2xl"
-              : isAbout
-                ? "bg-[#f5f5f7] border border-black/15 text-gray-900 shadow-2xl"
-              : win.appId === "Music" || win.appId === "Finder" || win.appId === "TextEdit" || win.appId === "PDFViewer" || win.appId === "Trash" || win.appId === "Mail" || win.appId === "Contact Me"
-                ? isDarkMode
-                  ? "bg-[#1e1e1e] text-white border border-white/10"
-                  : "bg-white text-gray-900 border border-black/10 shadow-2xl"
-                : "backdrop-blur-xl bg-black/40 border border-white/15 text-white shadow-xl"
+              ? "backdrop-blur-3xl bg-[#1e1e1e]/45 border border-white/10 text-white shadow-2xl"
+              : "backdrop-blur-3xl bg-white/65 border border-black/10 text-gray-900 shadow-2xl"
+            : isAbout
+              ? "bg-[#f5f5f7] border border-black/15 text-gray-900 shadow-2xl"
+            : win.appId === "Music" || win.appId === "Finder" || win.appId === "TextEdit" || win.appId === "PDFViewer" || win.appId === "Trash" || win.appId === "Mail" || win.appId === "Contact Me"
+              ? isDarkMode
+                ? "bg-[#1e1e1e] text-white border border-white/10"
+                : "bg-white text-gray-900 border border-black/10 shadow-2xl"
+              : "backdrop-blur-xl bg-black/40 border border-white/15 text-white shadow-xl"
           } ${isDragging ? "cursor-grabbing" : ""} ${isResizing ? "select-none" : ""}`}
           style={{
             width: '100%',
             height: '100%',
-            transformOrigin: 'center center',
-            willChange: isDragging || isResizing ? 'transform' : 'transform, opacity',
+            transformOrigin: isMinimizing || isRestoring || win.minimized ? 'bottom center' : 'center center',
+            willChange: isDragging || isResizing || isMinimizing || isRestoring ? 'transform' : 'transform, opacity',
           }}
         >
               {/* Title Bar - Skip for apps that integrate their own */}

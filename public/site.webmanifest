@@ -1,0 +1,19 @@
+{
+  "name": "Svart Hull | Web Developer",
+  "short_name": "Svart Hull",
+  "icons": [
+    {
+      "src": "/icons/favicon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/icons/favicon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "theme_color": "#000000",
+  "background_color": "#000000",
+  "display": "standalone"
+}

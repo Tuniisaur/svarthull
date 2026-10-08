@@ -779,9 +779,9 @@ export default function Desktop({ setStage, isLocked = false }) {
 
               {/* Notification Content */}
               <div className="flex-1 min-w-0 pt-0.5">
-                <div className="flex items-center justify-between gap-1 leading-none">
-                  <span className={`text-[12px] font-bold tracking-tight whitespace-nowrap ${isDarkMode ? "text-white/90" : "text-neutral-900"}`}>
-                    Dock
+                <div className="flex items-center justify-between gap-2 leading-none">
+                  <span className={`text-[13px] font-semibold tracking-tight whitespace-nowrap ${isDarkMode ? "text-white" : "text-neutral-900"}`}>
+                    Bottom Bar
                   </span>
                   <div className="flex items-center gap-1.5 ml-auto shrink-0">
                     <span className={`text-[11px] whitespace-nowrap ${isDarkMode ? "text-white/40" : "text-neutral-500"}`}>
@@ -802,10 +802,7 @@ export default function Desktop({ setStage, isLocked = false }) {
                   </div>
                 </div>
 
-                <div className={`text-[13px] font-semibold mt-1 tracking-tight leading-tight whitespace-nowrap truncate ${isDarkMode ? "text-white" : "text-neutral-900"}`}>
-                  Navigation & Apps
-                </div>
-                <div className={`text-[12px] mt-1 leading-snug font-normal ${isDarkMode ? "text-white/75" : "text-neutral-600"}`}>
+                <div className={`text-[12px] mt-1.5 leading-snug font-normal ${isDarkMode ? "text-white/80" : "text-neutral-600"}`}>
                   Tap the bottom bar icons to open Projects, Launchpad, Contact, Music, About, or Instagram.
                 </div>
               </div>

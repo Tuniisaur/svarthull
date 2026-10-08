@@ -749,50 +749,65 @@ export default function Desktop({ setStage, isLocked = false }) {
         </>
       )}
 
-      {/* macOS Mobile Notification Banner (Bottom Bar Explanation) */}
+      {/* macOS Mobile Notification Banner (English) */}
       <AnimatePresence>
         {showMobileDockNotice && (
           <motion.div
-            initial={{ opacity: 0, y: -30, scale: 0.95 }}
+            initial={{ opacity: 0, y: -45, scale: 0.94 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -25, scale: 0.95 }}
-            transition={{ type: "spring", damping: 26, stiffness: 320 }}
-            className={`fixed top-10 left-3 right-3 z-[999999] max-w-sm mx-auto p-3.5 rounded-2xl shadow-2xl border backdrop-blur-2xl select-none sm:hidden ${
+            exit={{ opacity: 0, y: -30, scale: 0.94, filter: "blur(6px)" }}
+            transition={{ type: "spring", damping: 24, stiffness: 320, mass: 0.8 }}
+            className={`fixed left-2.5 right-2.5 max-w-[360px] mx-auto z-[999999] p-3.5 rounded-[22px] shadow-[0_20px_50px_rgba(0,0,0,0.5)] border backdrop-blur-3xl select-none sm:hidden transition-colors ${
               isDarkMode
-                ? "bg-[#1E1E1E]/90 border-white/15 text-white shadow-[0_12px_36px_rgba(0,0,0,0.65)]"
-                : "bg-white/90 border-black/10 text-neutral-900 shadow-[0_12px_36px_rgba(0,0,0,0.18)]"
+                ? "bg-[#252528]/85 border-white/[0.18] text-white"
+                : "bg-[#fbfbfd]/90 border-black/[0.1] text-neutral-900 shadow-[0_20px_50px_rgba(0,0,0,0.18)]"
             }`}
             style={{
-              paddingTop: "calc(env(safe-area-inset-top, 0px) + 12px)",
+              top: "calc(env(safe-area-inset-top, 0px) + 38px)",
+              fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', sans-serif",
             }}
           >
             <div className="flex items-start gap-3">
-              <div className="w-9 h-9 rounded-xl overflow-hidden shrink-0 flex items-center justify-center bg-black/15 dark:bg-white/10 p-1.5 shadow-xs border border-white/10">
-                <img src="/icons/logo.svg" alt="Svart Hull" className="w-5 h-5 object-contain" />
+              {/* macOS Squircle App Icon */}
+              <div className="w-10 h-10 rounded-[10px] overflow-hidden shrink-0 flex items-center justify-center bg-black/10 dark:bg-white/5 shadow-md border border-white/10">
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/commons/c/c9/Finder_Icon_macOS_Big_Sur.png"
+                  alt="Finder"
+                  className="w-full h-full object-cover"
+                />
               </div>
 
-              <div className="flex-1 min-w-0 pr-0.5">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-neutral-400">
-                      Bottom Bar
+              {/* Notification Content */}
+              <div className="flex-1 min-w-0 pt-0.5">
+                <div className="flex items-center justify-between gap-1 leading-none">
+                  <span className={`text-[12px] font-bold tracking-tight ${isDarkMode ? "text-white/90" : "text-neutral-900"}`}>
+                    Dock
+                  </span>
+                  <div className="flex items-center gap-1.5 ml-auto">
+                    <span className={`text-[11px] ${isDarkMode ? "text-white/40" : "text-neutral-500"}`}>
+                      now
                     </span>
-                    <span className="text-[10px] text-neutral-400">• ora</span>
+                    <button
+                      type="button"
+                      onClick={() => setShowMobileDockNotice(false)}
+                      className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] active:scale-90 transition ${
+                        isDarkMode
+                          ? "bg-white/10 hover:bg-white/20 text-white/70"
+                          : "bg-black/5 hover:bg-black/10 text-neutral-600"
+                      }`}
+                      aria-label="Dismiss notification"
+                    >
+                      ✕
+                    </button>
                   </div>
-                  <button
-                    onClick={() => setShowMobileDockNotice(false)}
-                    className="w-5 h-5 rounded-full flex items-center justify-center text-xs opacity-60 hover:opacity-100 hover:bg-black/5 dark:hover:bg-white/10 transition"
-                    title="Chiudi"
-                  >
-                    ✕
-                  </button>
                 </div>
-                <h4 className="text-xs font-semibold mt-0.5 leading-snug">
-                  Icone di navigazione
-                </h4>
-                <p className="text-[11px] mt-0.5 leading-relaxed opacity-80">
-                  Tocca le icone in basso per accedere a Progetti, Launchpad, Contatti, Musica, Info o Instagram.
-                </p>
+
+                <div className={`text-[13px] font-semibold mt-1 tracking-tight leading-tight ${isDarkMode ? "text-white" : "text-neutral-900"}`}>
+                  Navigation & Apps
+                </div>
+                <div className={`text-[12px] mt-1 leading-snug font-normal ${isDarkMode ? "text-white/75" : "text-neutral-600"}`}>
+                  Tap the bottom bar icons to open Projects, Launchpad, Contact, Music, About, or Instagram.
+                </div>
               </div>
             </div>
           </motion.div>

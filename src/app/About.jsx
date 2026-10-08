@@ -107,8 +107,8 @@ export default function About() {
             type="button"
             onClick={() => window.open("https://www.instagram.com/svarthull.dev/", "_blank")}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg border text-xs font-medium transition-all duration-200 hover:scale-105 active:scale-95 ${isDarkMode
-                ? "border-white/15 bg-white/5 hover:bg-gradient-to-r hover:from-purple-600/30 hover:via-pink-600/30 hover:to-amber-500/30 hover:border-pink-500/40 hover:shadow-[0_4px_16px_rgba(236,72,153,0.25)] text-white"
-                : "border-black/10 bg-white hover:bg-gradient-to-r hover:from-purple-50 hover:via-pink-50 hover:to-amber-50 hover:border-pink-400 hover:text-pink-600 text-neutral-800 shadow-2xs hover:shadow-md"
+              ? "border-white/15 bg-white/5 hover:bg-gradient-to-r hover:from-purple-600/30 hover:via-pink-600/30 hover:to-amber-500/30 hover:border-pink-500/40 hover:shadow-[0_4px_16px_rgba(236,72,153,0.25)] text-white"
+              : "border-black/10 bg-white hover:bg-gradient-to-r hover:from-purple-50 hover:via-pink-50 hover:to-amber-50 hover:border-pink-400 hover:text-pink-600 text-neutral-800 shadow-2xs hover:shadow-md"
               }`}
           >
             <Instagram size={12} className="transition-transform group-hover:scale-110" />

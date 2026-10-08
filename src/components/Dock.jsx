@@ -209,7 +209,7 @@ export default function Dock() {
 
   return (
     <div
-      className="fixed left-1/2 -translate-x-1/2 flex items-end px-1.5 sm:px-1 py-1 rounded-2xl h-[48px] sm:h-[56px] overflow-visible transition-all duration-300 z-[99999] max-w-[calc(100vw-16px)]"
+      className="fixed left-1/2 -translate-x-1/2 flex items-end px-2 sm:px-1 py-1 rounded-2xl h-[53px] sm:h-[56px] overflow-visible transition-all duration-300 z-[99999] max-w-[calc(100vw-16px)]"
       style={{
         bottom: "max(10px, calc(env(safe-area-inset-bottom, 0px) + 8px))",
       }}
@@ -217,7 +217,7 @@ export default function Dock() {
     >
       <GlassSurface
         tint={isDarkMode ? 0.05 : 0.02}
-        radius={16}
+        radius={18}
         blur={20}
         chroma={0.1}
         specular={false}
@@ -233,7 +233,7 @@ export default function Dock() {
           );
 
         const scale = getIconScale(index);
-        const baseSize = isMobile ? 38 : 48; // Responsive icon size in pixels
+        const baseSize = isMobile ? 42 : 48; // Responsive icon size in pixels
         const iconSize = baseSize * scale;
         const appWindows = windows.filter((w) => {
           if (w.isClosing) return false;

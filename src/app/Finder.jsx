@@ -34,7 +34,7 @@ import {
   PanelLeft
 } from "lucide-react";
 
-import { DEFAULT_PROJECT_FOLDERS } from "../constants/folders";
+import { DEFAULT_PROJECT_FOLDERS, DEFAULT_SVART_HULL_FILES } from "../constants/folders";
 
 // Mock folder icons
 const BLUE_FOLDER_URL = "https://s3.macosicons.com/macosicons/icons/GecwaBmkFQ/lowResPngFile_c3ef21fe8fabfd9d23fcc3ab3134dcf9_GecwaBmkFQ.png";
@@ -313,14 +313,17 @@ export default function Finder({ initialPath = "/icloud", windowId, maximized, i
       const filtered = parsed.filter(f => !oldIds.has(f.id));
       const existingNames = new Set(filtered.map(f => f.name?.toLowerCase()));
       const toAdd = DEFAULT_PROJECT_FOLDERS.filter(df => !existingNames.has(df.name.toLowerCase()));
-      if (toAdd.length > 0) {
-        const merged = [...toAdd, ...filtered];
+      // Inject default svart hull files if not already present
+      const existingIds = new Set(filtered.map(f => f.id));
+      const filesToAdd = DEFAULT_SVART_HULL_FILES.filter(f => !existingIds.has(f.id));
+      if (toAdd.length > 0 || filesToAdd.length > 0) {
+        const merged = [...toAdd, ...filesToAdd, ...filtered];
         localStorage.setItem("os_icloud_files", JSON.stringify(merged));
         return merged;
       }
       return filtered;
     } catch {
-      return DEFAULT_PROJECT_FOLDERS;
+      return [...DEFAULT_PROJECT_FOLDERS, ...DEFAULT_SVART_HULL_FILES];
     }
   });
   const [documentsFiles, setDocumentsFiles] = useState(() => {
@@ -990,6 +993,17 @@ export default function Finder({ initialPath = "/icloud", windowId, maximized, i
         />
       );
     }
+    if (file.type === "webloc") {
+      return (
+        <div className={`${sizeClass} flex items-center justify-center rounded-xl overflow-hidden bg-gradient-to-br from-blue-400 to-blue-600 shadow-sm shrink-0`}>
+          <svg viewBox="0 0 24 24" className="w-3/5 h-3/5" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="2" y1="12" x2="22" y2="12" />
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+          </svg>
+        </div>
+      );
+    }
     return (
       <div className={`${sizeClass} flex items-center justify-center bg-gray-100 rounded-md border border-gray-200 shrink-0`}>
         <FileText size={24} className="text-gray-400" />
@@ -1014,6 +1028,8 @@ export default function Finder({ initialPath = "/icloud", windowId, maximized, i
       handleOpenFolder(file);
     } else if (file.type === "image" || file.type === "video") {
       setPreviewImage(file);
+    } else if (file.type === "webloc") {
+      window.open(file.url, "_blank");
     } else if (file.type === "document") {
       openApp("TextEdit", <TextEdit file={file} />);
     } else if (file.type === "pdf") {

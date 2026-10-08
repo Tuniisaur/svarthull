@@ -526,7 +526,7 @@ export default function Desktop({ setStage, isLocked = false }) {
       )}
 
       {/* Background "svart hull" Branding */}
-      <div className="absolute top-9 sm:top-12 md:top-14 left-1/2 -translate-x-1/2 z-0 pointer-events-none select-none text-center flex flex-col items-center">
+      <div className="absolute top-9 sm:top-12 md:top-14 left-1/2 -translate-x-1/2 z-0 pointer-events-none select-none text-center flex flex-col items-center w-full px-3 sm:w-auto sm:px-0">
         <h1
           className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl text-white/90 tracking-[0.16em] font-normal drop-shadow-[0_4px_30px_rgba(0,0,0,0.85)] leading-none font-migha"
           style={{ fontFamily: "'Migha Display', 'Migha', sans-serif" }}
@@ -539,6 +539,65 @@ export default function Desktop({ setStage, isLocked = false }) {
         >
           dev
         </span>
+
+        {/* Mobile Desktop Icons - In riga sotto alla scritta dev con giusto margine */}
+        {!isLocked && showIcons && (
+          <div className="sm:hidden mt-6 flex flex-row items-start justify-center gap-5 flex-wrap pointer-events-auto">
+            {allDesktopItems.map((item, index) => {
+              const isCut = isCutMode && clipboard && clipboard.some(c => c.id === item.id);
+              return (
+                <motion.div
+                  key={`mobile-${item.id}`}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: isCut ? 0.45 : 1, scale: 1 }}
+                  transition={{ delay: index * 0.05 }}
+                  className={`
+                    flex flex-col items-center justify-center w-20 p-2 rounded-xl cursor-pointer
+                    active:bg-white/10 active:scale-95 transition-all
+                    ${selectedItem === item.id ? "bg-blue-500/30" : ""}
+                    ${isCut ? "opacity-45" : ""}
+                  `}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleItemDoubleClick(item);
+                  }}
+                  onContextMenu={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setSelectedItem(item.id);
+                  }}
+                >
+                  <div className="flex items-center justify-center">
+                    {getDesktopItemIcon(item)}
+                  </div>
+                  
+                  {editingItem === item.id ? (
+                    <input
+                      type="text"
+                      value={editName}
+                      onChange={(e) => setEditName(e.target.value)}
+                      onBlur={() => handleRenameSubmit(item)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") handleRenameSubmit(item);
+                        if (e.key === "Escape") {
+                          setEditingItem(null);
+                          setEditName("");
+                        }
+                      }}
+                      className="w-full text-center text-xs text-white bg-blue-500/50 rounded px-1 py-0.5 outline-none mt-1"
+                      autoFocus
+                      onClick={(e) => e.stopPropagation()}
+                    />
+                  ) : (
+                    <span className="text-[11px] text-white/90 font-medium text-center mt-1.5 drop-shadow-[0_2px_4px_rgba(0,0,0,0.85)] line-clamp-2 break-all leading-tight">
+                      {item.name}
+                    </span>
+                  )}
+                </motion.div>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       {/* Only show TopBar, Windows, and Dock when NOT locked */}
@@ -560,25 +619,14 @@ export default function Desktop({ setStage, isLocked = false }) {
             <MusicWidget />
           </div>
 
-          {/* Desktop Icons */}
+          {/* Desktop Icons (Desktop/Tablet) */}
           {showIcons && (
-            <div className="absolute inset-0 pointer-events-none">
+            <div className="hidden sm:block absolute inset-0 pointer-events-none">
               {allDesktopItems.map((item, index) => {
-                const isMobileScreen = typeof window !== 'undefined' && window.innerWidth < 640;
-                const defaultX = isMobileScreen 
-                  ? 16 + (index % 3) * 80 
-                  : 16 + index * 100;
-                const defaultY = isMobileScreen 
-                  ? 110 + Math.floor(index / 3) * 85 
-                  : 32 + index * 100;
-                const maxMobileX = typeof window !== 'undefined' ? window.innerWidth - 85 : 280;
-                const maxMobileY = typeof window !== 'undefined' ? window.innerHeight - 110 : 500;
-                const itemX = isMobileScreen 
-                  ? (item.x !== undefined && item.x <= maxMobileX ? item.x : defaultX)
-                  : (item.x !== undefined ? item.x : defaultX);
-                const itemY = isMobileScreen 
-                  ? (item.y !== undefined && item.y >= 105 && item.y <= maxMobileY ? item.y : defaultY)
-                  : (item.y !== undefined ? item.y : defaultY);
+                const defaultX = 16 + index * 100;
+                const defaultY = 32 + index * 100;
+                const itemX = item.x !== undefined ? item.x : defaultX;
+                const itemY = item.y !== undefined ? item.y : defaultY;
                 const isCut = isCutMode && clipboard && clipboard.some(c => c.id === item.id);
                 return (
                 <motion.div
@@ -618,12 +666,7 @@ export default function Desktop({ setStage, isLocked = false }) {
                   }}
                   onClick={(e) => {
                     e.stopPropagation();
-                    const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
-                    if (isMobile) {
-                      handleItemDoubleClick(item);
-                    } else {
-                      setSelectedItem(item.id);
-                    }
+                    setSelectedItem(item.id);
                   }}
                   onDoubleClick={() => handleItemDoubleClick(item)}
                   onContextMenu={(e) => {

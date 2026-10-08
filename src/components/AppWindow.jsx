@@ -26,9 +26,9 @@ export default function AppWindow({ window: win }) {
 
     if (mobile) {
       const width = Math.max(280, sw - 12);
-      const height = Math.max(260, sh - 104);
+      const height = Math.max(240, sh - 125);
       const x = Math.max(0, Math.round((sw - width) / 2));
-      const y = 34;
+      const y = 38;
       return { width, height, x, y, isMobile: true };
     }
 

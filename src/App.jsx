@@ -48,7 +48,7 @@ export default function App() {
   };
 
   return (
-    <div className="relative w-screen h-screen overflow-hidden bg-black">
+    <div className="fixed inset-0 w-full h-full h-[100dvh] overflow-hidden bg-black select-none">
       {booting && <BootLoader onComplete={() => setBooting(false)} />}
       <Desktop setStage={handleStage} isLocked={false} />
     </div>

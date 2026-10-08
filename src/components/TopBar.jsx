@@ -118,8 +118,10 @@ export default function TopBar({ appTitle = "Svart Hull", setStage }) {
 
   return (
 <div
-  className="w-full h-7 flex items-center justify-between px-1.5 sm:px-2 select-none fixed top-0 left-0 z-[999998] text-white backdrop-blur-[2px]"
+  className="w-full flex items-center justify-between px-1.5 sm:px-2 select-none fixed top-0 left-0 z-[999998] text-white backdrop-blur-[2px]"
   style={{
+    paddingTop: "env(safe-area-inset-top, 0px)",
+    height: "calc(28px + env(safe-area-inset-top, 0px))",
     background: "linear-gradient(to bottom, rgba(0,0,0,0.18), rgba(0,0,0,0))"
   }}
 >

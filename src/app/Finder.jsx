@@ -160,16 +160,11 @@ export default function Finder({ initialPath = "/icloud", windowId, maximized, i
 
   const handleFileClick = (e, file) => {
     e.stopPropagation();
-    const now = Date.now();
     const isMobileDevice = typeof window !== 'undefined' && window.innerWidth < 640;
-    if (isMobileDevice && lastTapIdRef.current === file.id && (now - lastTapTimeRef.current) < 450) {
+    if (isMobileDevice) {
       handleOpenFile(file);
-      lastTapTimeRef.current = 0;
-      lastTapIdRef.current = null;
       return;
     }
-    lastTapTimeRef.current = now;
-    lastTapIdRef.current = file.id;
 
     if (e.shiftKey) {
       const allFiles = filteredFiles;

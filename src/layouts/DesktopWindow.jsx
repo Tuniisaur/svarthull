@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Dock from "../components/Dock";
 import AppWindow from "../components/AppWindow";
 import { useAppStore } from "../store/Appstore";
@@ -489,7 +489,7 @@ export default function Desktop({ setStage, isLocked = false }) {
 
   return (
     <div
-      className="relative w-screen h-screen max-w-screen max-h-screen overflow-hidden bg-cover bg-center desktop-area bg-[#020202]"
+      className="fixed inset-0 w-full h-full h-[100dvh] max-w-full max-h-full overflow-hidden bg-cover bg-center desktop-area bg-[#020202]"
       style={
         wallpaper && wallpaper !== "shader"
           ? { backgroundImage: `url(${wallpaper})` }
@@ -577,7 +577,7 @@ export default function Desktop({ setStage, isLocked = false }) {
                   ? (item.x !== undefined && item.x <= maxMobileX ? item.x : defaultX)
                   : (item.x !== undefined ? item.x : defaultX);
                 const itemY = isMobileScreen 
-                  ? (item.y !== undefined && item.y <= maxMobileY ? item.y : defaultY)
+                  ? (item.y !== undefined && item.y >= 105 && item.y <= maxMobileY ? item.y : defaultY)
                   : (item.y !== undefined ? item.y : defaultY);
                 const isCut = isCutMode && clipboard && clipboard.some(c => c.id === item.id);
                 return (
@@ -618,7 +618,12 @@ export default function Desktop({ setStage, isLocked = false }) {
                   }}
                   onClick={(e) => {
                     e.stopPropagation();
-                    setSelectedItem(item.id);
+                    const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
+                    if (isMobile) {
+                      handleItemDoubleClick(item);
+                    } else {
+                      setSelectedItem(item.id);
+                    }
                   }}
                   onDoubleClick={() => handleItemDoubleClick(item)}
                   onContextMenu={(e) => {

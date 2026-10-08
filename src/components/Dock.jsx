@@ -209,7 +209,10 @@ export default function Dock() {
 
   return (
     <div
-      className="absolute bottom-2 sm:bottom-1 left-1/2 -translate-x-1/2 flex items-end px-1.5 sm:px-1 py-1 rounded-2xl h-[48px] sm:h-[56px] overflow-visible transition-all duration-300 z-[99999] max-w-[calc(100vw-16px)]"
+      className="fixed left-1/2 -translate-x-1/2 flex items-end px-1.5 sm:px-1 py-1 rounded-2xl h-[48px] sm:h-[56px] overflow-visible transition-all duration-300 z-[99999] max-w-[calc(100vw-16px)]"
+      style={{
+        bottom: "max(10px, calc(env(safe-area-inset-bottom, 0px) + 8px))",
+      }}
       onMouseLeave={handleMouseLeave}
     >
       <GlassSurface

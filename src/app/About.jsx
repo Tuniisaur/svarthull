@@ -9,9 +9,8 @@ export default function About() {
 
   return (
     <div
-      className={`h-full w-full flex flex-col overflow-y-auto select-none transition-colors duration-150 ${
-        isDarkMode ? "bg-[#1E1E1E] text-white" : "bg-[#F6F6F8] text-neutral-900"
-      }`}
+      className={`h-full w-full flex flex-col overflow-y-auto select-none transition-colors duration-150 ${isDarkMode ? "bg-[#1E1E1E] text-white" : "bg-[#F6F6F8] text-neutral-900"
+        }`}
       style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif" }}
     >
       <div className="max-w-2xl mx-auto w-full p-4 sm:p-7 space-y-5 sm:space-y-6">
@@ -21,9 +20,8 @@ export default function About() {
             <img
               src="/icons/sh.jpg"
               alt="Svart Hull"
-              className={`w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover shadow-lg ring-4 ${
-                isDarkMode ? "ring-white/10 border border-white/15" : "ring-white border border-neutral-200"
-              }`}
+              className={`w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover shadow-lg ring-4 ${isDarkMode ? "ring-white/10 border border-white/15" : "ring-white border border-neutral-200"
+                }`}
             />
             <span
               className="absolute bottom-1 right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-white dark:border-[#1E1E1E]"
@@ -50,16 +48,15 @@ export default function About() {
               Web Developer
             </p>
             <p className={`text-xs mt-2 max-w-md ${isDarkMode ? "text-neutral-300" : "text-neutral-600"}`}>
-              Crafting interactive 3D web experiences, modern full-stack web applications, and fluid interfaces with cutting-edge technologies.
+              Sites that hit different.
             </p>
           </div>
         </div>
 
         {/* 2. Developer Specifications Card */}
         <div
-          className={`rounded-xl border p-4 sm:p-5 space-y-2.5 text-xs ${
-            isDarkMode ? "bg-white/[0.04] border-white/10" : "bg-white border-black/10 shadow-xs"
-          }`}
+          className={`rounded-xl border p-4 sm:p-5 space-y-2.5 text-xs ${isDarkMode ? "bg-white/[0.04] border-white/10" : "bg-white border-black/10 shadow-xs"
+            }`}
         >
           <h2 className="text-[11px] font-bold uppercase tracking-wider text-neutral-400 mb-3">
             Developer Specifications
@@ -109,13 +106,12 @@ export default function About() {
           <button
             type="button"
             onClick={() => window.open("https://www.instagram.com/svarthull.dev/", "_blank")}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg border text-xs font-medium transition-all duration-200 hover:scale-105 active:scale-95 ${
-              isDarkMode
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg border text-xs font-medium transition-all duration-200 hover:scale-105 active:scale-95 ${isDarkMode
                 ? "border-white/15 bg-white/5 hover:bg-gradient-to-r hover:from-purple-600/30 hover:via-pink-600/30 hover:to-amber-500/30 hover:border-pink-500/40 hover:shadow-[0_4px_16px_rgba(236,72,153,0.25)] text-white"
                 : "border-black/10 bg-white hover:bg-gradient-to-r hover:from-purple-50 hover:via-pink-50 hover:to-amber-50 hover:border-pink-400 hover:text-pink-600 text-neutral-800 shadow-2xs hover:shadow-md"
-            }`}
+              }`}
           >
-            <Instagram size={13} className="transition-transform group-hover:scale-110" />
+            <Instagram size={12} className="transition-transform group-hover:scale-110" />
             <span>Instagram</span>
             <ExternalLink size={11} className="opacity-60" />
           </button>

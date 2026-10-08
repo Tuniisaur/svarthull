@@ -77,7 +77,7 @@ export default function Desktop({ setStage, isLocked = false }) {
     return localStorage.getItem("os_is_cut_mode") === "true";
   });
   const [toast, setToast] = useState(null);
-
+  const [showMobileDockNotice, setShowMobileDockNotice] = useState(false);
 
   // Define allDesktopItems before useEffect
   const allDesktopItems = [
@@ -91,6 +91,26 @@ export default function Desktop({ setStage, isLocked = false }) {
       return () => clearTimeout(timer);
     }
   }, [toast]);
+
+  // Show macOS-style notification explaining bottom bar icons when entering home on mobile
+  useEffect(() => {
+    const isMobileScreen = typeof window !== "undefined" && window.innerWidth < 640;
+    if (isMobileScreen && !isLocked) {
+      const timer = setTimeout(() => {
+        setShowMobileDockNotice(true);
+      }, 700);
+      return () => clearTimeout(timer);
+    }
+  }, [isLocked]);
+
+  useEffect(() => {
+    if (showMobileDockNotice) {
+      const timer = setTimeout(() => {
+        setShowMobileDockNotice(false);
+      }, 7500);
+      return () => clearTimeout(timer);
+    }
+  }, [showMobileDockNotice]);
 
   useEffect(() => {
     // Listen for wallpaper changes from Gallery
@@ -728,6 +748,56 @@ export default function Desktop({ setStage, isLocked = false }) {
 
         </>
       )}
+
+      {/* macOS Mobile Notification Banner (Bottom Bar Explanation) */}
+      <AnimatePresence>
+        {showMobileDockNotice && (
+          <motion.div
+            initial={{ opacity: 0, y: -30, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -25, scale: 0.95 }}
+            transition={{ type: "spring", damping: 26, stiffness: 320 }}
+            className={`fixed top-10 left-3 right-3 z-[999999] max-w-sm mx-auto p-3.5 rounded-2xl shadow-2xl border backdrop-blur-2xl select-none sm:hidden ${
+              isDarkMode
+                ? "bg-[#1E1E1E]/90 border-white/15 text-white shadow-[0_12px_36px_rgba(0,0,0,0.65)]"
+                : "bg-white/90 border-black/10 text-neutral-900 shadow-[0_12px_36px_rgba(0,0,0,0.18)]"
+            }`}
+            style={{
+              paddingTop: "calc(env(safe-area-inset-top, 0px) + 12px)",
+            }}
+          >
+            <div className="flex items-start gap-3">
+              <div className="w-9 h-9 rounded-xl overflow-hidden shrink-0 flex items-center justify-center bg-black/15 dark:bg-white/10 p-1.5 shadow-xs border border-white/10">
+                <img src="/icons/logo.svg" alt="Svart Hull" className="w-5 h-5 object-contain" />
+              </div>
+
+              <div className="flex-1 min-w-0 pr-0.5">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-neutral-400">
+                      Bottom Bar
+                    </span>
+                    <span className="text-[10px] text-neutral-400">• ora</span>
+                  </div>
+                  <button
+                    onClick={() => setShowMobileDockNotice(false)}
+                    className="w-5 h-5 rounded-full flex items-center justify-center text-xs opacity-60 hover:opacity-100 hover:bg-black/5 dark:hover:bg-white/10 transition"
+                    title="Chiudi"
+                  >
+                    ✕
+                  </button>
+                </div>
+                <h4 className="text-xs font-semibold mt-0.5 leading-snug">
+                  Icone di navigazione
+                </h4>
+                <p className="text-[11px] mt-0.5 leading-relaxed opacity-80">
+                  Tocca le icone in basso per accedere a Progetti, Launchpad, Contatti, Musica, Info o Instagram.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Premium macOS Toast Notification */}
       <AnimatePresence>

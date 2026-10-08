@@ -31,10 +31,18 @@ export default function About() {
             />
           </div>
 
-          <div className="flex-1 min-w-0">
+          <div className="flex-1 min-w-0 flex flex-col items-center sm:items-start">
+            {/* Mobile: Available for Projects in alto a Svart Hull */}
+            <span className="sm:hidden text-[10px] px-2.5 py-0.5 rounded-full font-medium bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 mb-1.5 flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              Available for Projects
+            </span>
+
             <div className="flex items-center justify-center sm:justify-start gap-2 flex-wrap">
               <h1 className="text-xl sm:text-2xl font-bold tracking-tight">Svart Hull</h1>
-              <span className="text-[10px] px-2 py-0.5 rounded-full font-medium bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+              {/* Desktop: accanto a Svart Hull */}
+              <span className="hidden sm:inline-flex items-center gap-1.5 text-[10px] px-2 py-0.5 rounded-full font-medium bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                 Available for Projects
               </span>
             </div>

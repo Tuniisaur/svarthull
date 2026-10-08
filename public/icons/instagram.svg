@@ -12,14 +12,14 @@
       <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
     </linearGradient>
   </defs>
-  <!-- macOS Squircle Body -->
-  <rect x="0" y="0" width="512" height="512" rx="112" ry="112" fill="url(#ig-grad)"/>
+  <!-- macOS Squircle Body (no shadow, padding matches other icons) -->
+  <rect x="32" y="32" width="448" height="448" rx="100" ry="100" fill="url(#ig-grad)"/>
   <!-- Top Glass Highlight -->
-  <rect x="0" y="0" width="512" height="256" rx="112" ry="112" fill="url(#shine)"/>
+  <rect x="32" y="32" width="448" height="224" rx="100" ry="100" fill="url(#shine)"/>
   <!-- Inner Border Stroke -->
-  <rect x="0" y="0" width="512" height="512" rx="112" ry="112" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="3"/>
+  <rect x="32" y="32" width="448" height="448" rx="100" ry="100" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="3"/>
   <!-- Instagram Camera Glyph -->
-  <rect x="96" y="96" width="320" height="320" rx="88" ry="88" fill="none" stroke="#ffffff" stroke-width="36"/>
-  <circle cx="256" cy="256" r="84" fill="none" stroke="#ffffff" stroke-width="36"/>
-  <circle cx="361" cy="152" r="22" fill="#ffffff"/>
+  <rect x="101" y="101" width="310" height="310" rx="80" ry="80" fill="none" stroke="#ffffff" stroke-width="32"/>
+  <circle cx="256" cy="256" r="76" fill="none" stroke="#ffffff" stroke-width="32"/>
+  <circle cx="348" cy="164" r="18" fill="#ffffff"/>
 </svg>

@@ -308,7 +308,8 @@ export default function Finder({ initialPath = "/icloud", windowId, maximized, i
         "icloud_desktop", "icloud_documents", "icloud_receipts", 
         "img_beverly", "img_brunch", "img_isolate", "img_june", 
         "img_kids", "img_la", "img_malibu", "img_mammoth", 
-        "img_pipeline", "img_purple"
+        "img_pipeline", "img_purple",
+        "vkhlamov_img_home", "vkhlamov_img_tabs"
       ]);
       const filtered = parsed.filter(f => !oldIds.has(f.id));
       const existingNames = new Set(filtered.map(f => f.name?.toLowerCase()));

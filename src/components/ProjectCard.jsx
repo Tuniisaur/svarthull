@@ -1,4 +1,5 @@
 import { CodeXml } from "lucide-react";
+import SkeletonImage from "./SkeletonImage";
 
 export default function ProjectCard({
   title,
@@ -14,7 +15,12 @@ export default function ProjectCard({
     <div className="bg-black/20 backdrop-blur-xl border  border-white/10 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300">
 
       <div className="w-full h-40 bg-gradient-to-r from-pink-500 to-purple-500 relative">
-        <img src={image} className="w-full h-full object-cover opacity-90" alt={title} />
+        <SkeletonImage
+          src={image}
+          className="w-full h-full object-cover opacity-90"
+          containerClassName="w-full h-full"
+          alt={title}
+        />
       </div>
 
       <div className="p-5">

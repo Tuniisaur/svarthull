@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FiTrash2, FiRefreshCw, FiAlertCircle } from "react-icons/fi";
 import { BsTrash, BsFileEarmark } from "react-icons/bs";
 import { useAppStore } from "../store/Appstore";
+import SkeletonImage from "../components/SkeletonImage";
 
 // Traffic lights inside the Trash header
 const TrafficLights = ({ windowId }) => {
@@ -209,7 +210,12 @@ export default function Trash({ windowId }) {
     if (file.type === "image") {
       return (
         <div className="w-full h-full rounded-lg overflow-hidden opacity-60">
-          <img src={file.url} alt={file.name} className="w-full h-full object-cover" />
+          <SkeletonImage
+            src={file.url}
+            alt={file.name}
+            className="w-full h-full object-cover"
+            containerClassName="w-full h-full"
+          />
         </div>
       );
     }

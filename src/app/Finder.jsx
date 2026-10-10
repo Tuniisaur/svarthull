@@ -5,6 +5,7 @@ import TextEdit from "./TextEdit";
 import PDFViewer from "./PDFViewer";
 import Spotify from "./Spotify";
 import About from "./About";
+import SkeletonImage from "../components/SkeletonImage";
 import {
   Clock,
   Users,
@@ -971,7 +972,12 @@ export default function Finder({ initialPath = "/icloud", windowId, maximized, i
     if (file.type === "image") {
       return (
         <div className={`${sizeClass} rounded-md overflow-hidden shadow-sm border border-black/5 shrink-0`}>
-          <img src={file.url} alt={file.name} className="w-full h-full object-cover" />
+          <SkeletonImage
+            src={file.url}
+            alt={file.name}
+            className="w-full h-full object-cover"
+            containerClassName="w-full h-full"
+          />
         </div>
       );
     }
@@ -1566,11 +1572,12 @@ export default function Finder({ initialPath = "/icloud", windowId, maximized, i
                   {selectedFile ? (
                     <div className="max-w-full max-h-full flex flex-col items-center justify-center">
                       {selectedFile.type === "image" ? (
-                        <img
+                        <SkeletonImage
                           src={selectedFile.url}
                           alt={selectedFile.name}
                           onDoubleClick={() => setPreviewImage(selectedFile)}
                           className="max-h-[300px] sm:max-h-[400px] object-contain rounded-xl shadow-lg border border-black/5 cursor-pointer"
+                          containerClassName="max-h-[300px] sm:max-h-[400px] rounded-xl overflow-hidden flex items-center justify-center min-w-[120px] min-h-[120px]"
                         />
                       ) : selectedFile.type === "video" ? (
                         <video
@@ -1669,15 +1676,20 @@ export default function Finder({ initialPath = "/icloud", windowId, maximized, i
                 onClick={(e) => e.stopPropagation()} 
               />
             ) : (
-              <motion.img
-                src={previewImage.url}
-                alt={previewImage.name}
+              <motion.div
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.9, opacity: 0 }}
-                className="max-w-[90%] max-h-[90%] object-contain rounded-lg shadow-2xl"
+                className="max-w-[90%] max-h-[90%] flex items-center justify-center"
                 onClick={(e) => e.stopPropagation()}
-              />
+              >
+                <SkeletonImage
+                  src={previewImage.url}
+                  alt={previewImage.name}
+                  className="max-w-[90vw] max-h-[85vh] object-contain rounded-lg shadow-2xl"
+                  containerClassName="rounded-lg overflow-hidden min-w-[200px] min-h-[200px] flex items-center justify-center"
+                />
+              </motion.div>
             )}
           </motion.div>
         )}

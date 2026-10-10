@@ -12,6 +12,7 @@ import PDFViewer from "../app/PDFViewer";
 import AvailabilityWidget from "../components/widgets/AvailabilityWidget";
 import MusicWidget from "../components/widgets/MusicWidget";
 import ShaderGroupSwitcher from "../components/ShaderGroupSwitcher";
+import SkeletonImage from "../components/SkeletonImage";
 import { DEFAULT_PROJECT_FOLDERS, DEFAULT_SVART_HULL_FILES, DEFAULT_VKHLAMOV_FILES } from "../constants/folders";
 
 class WindowErrorBoundary extends React.Component {
@@ -518,7 +519,12 @@ export default function Desktop({ setStage, isLocked = false }) {
     if (item.type === "image" && item.url) {
       return (
         <div className="w-14 h-14 rounded-lg overflow-hidden border border-white/20 shadow-lg shrink-0 mb-1">
-          <img src={item.url} alt={item.name} className="w-full h-full object-cover" />
+          <SkeletonImage
+            src={item.url}
+            alt={item.name}
+            className="w-full h-full object-cover"
+            containerClassName="w-full h-full"
+          />
         </div>
       );
     }
@@ -891,12 +897,14 @@ export default function Desktop({ setStage, isLocked = false }) {
                 onClick={(e) => e.stopPropagation()}
               />
             ) : (
-              <img 
-                src={previewImage.url} 
-                alt={previewImage.name} 
-                className="max-w-[90vw] max-h-[85vh] rounded-xl shadow-2xl object-contain select-none"
-                onClick={(e) => e.stopPropagation()}
-              />
+              <div onClick={(e) => e.stopPropagation()} className="max-w-[90vw] max-h-[85vh] flex items-center justify-center">
+                <SkeletonImage 
+                  src={previewImage.url} 
+                  alt={previewImage.name} 
+                  className="max-w-[90vw] max-h-[85vh] rounded-xl shadow-2xl object-contain select-none"
+                  containerClassName="rounded-xl overflow-hidden min-w-[200px] min-h-[200px] flex items-center justify-center"
+                />
+              </div>
             )}
           </motion.div>
         )}

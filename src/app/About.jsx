@@ -37,7 +37,7 @@ export default function About() {
             </span>
 
             <div className="flex items-center justify-center sm:justify-start gap-2 flex-wrap">
-              <h1 className="text-xl sm:text-2xl font-bold tracking-tight">Svart Hull</h1>
+              <h2 className="text-xl sm:text-2xl font-bold tracking-tight">Svart Hull</h2>
               {/* Desktop: accanto a Svart Hull */}
               <span className="hidden sm:inline-flex items-center gap-1.5 text-[10px] px-2 py-0.5 rounded-full font-medium bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />

@@ -22,7 +22,7 @@ export default function Folder() {
             alt="Folder"
             className="w-5 h-5"
           />
-          <h1 className="text-white font-semibold text-sm">Portfolio</h1>
+          <span className="text-white font-semibold text-sm">Portfolio</span>
         </div>
         <button
           onClick={() => setIsOpen(false)}

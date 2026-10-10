@@ -60,7 +60,8 @@ export default function ContactMe({ windowId }) {
   });
 
   const [showCc, setShowCc] = useState(false);
-  const [status, setStatus] = useState("idle"); // "idle" | "sending" | "sent"
+  const [status, setStatus] = useState("idle"); // "idle" | "sending" | "sent" | "error"
+  const [errorMessage, setErrorMessage] = useState("");
   const [copiedEmail, setCopiedEmail] = useState(false);
 
   const textareaRef = useRef(null);
@@ -72,16 +73,47 @@ export default function ContactMe({ windowId }) {
     setTimeout(() => setCopiedEmail(false), 2000);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     if (e) e.preventDefault();
     if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
       return;
     }
 
     setStatus("sending");
+    setErrorMessage("");
 
-    setTimeout(() => {
-      setStatus("sent");
+    try {
+      const response = await fetch("/api/send-email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          subject: formData.subject.trim(),
+          message: formData.message.trim(),
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setStatus("sent");
+      } else {
+        // Fallback a mailto in caso di mancata configurazione API key o errore backend
+        console.warn("[Mail] API error, falling back to mailto client:", data?.error);
+        const mailtoSubject = encodeURIComponent(
+          formData.subject.trim() || `Inquiry from ${formData.name.trim()}`
+        );
+        const mailtoBody = encodeURIComponent(
+          `From: ${formData.name} <${formData.email}>\n\nMessage:\n${formData.message}`
+        );
+        window.open(`mailto:${targetEmail}?subject=${mailtoSubject}&body=${mailtoBody}`, "_blank");
+        setStatus("sent");
+      }
+    } catch (err) {
+      console.error("[Mail] Network error, fallback mailto:", err);
       const mailtoSubject = encodeURIComponent(
         formData.subject.trim() || `Inquiry from ${formData.name.trim()}`
       );
@@ -89,7 +121,8 @@ export default function ContactMe({ windowId }) {
         `From: ${formData.name} <${formData.email}>\n\nMessage:\n${formData.message}`
       );
       window.open(`mailto:${targetEmail}?subject=${mailtoSubject}&body=${mailtoBody}`, "_blank");
-    }, 700);
+      setStatus("sent");
+    }
   };
 
   const handleReset = () => {

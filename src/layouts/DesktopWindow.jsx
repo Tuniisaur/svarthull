@@ -5,13 +5,14 @@ import { useAppStore } from "../store/Appstore";
 import TopBar from "../components/TopBar";
 import { AnimatePresence, motion } from "framer-motion";
 import { FiFolder, FiFile } from "react-icons/fi";
+import { X } from "lucide-react";
 import Finder from "../app/Finder";
 import TextEdit from "../app/TextEdit";
 import PDFViewer from "../app/PDFViewer";
 import AvailabilityWidget from "../components/widgets/AvailabilityWidget";
 import MusicWidget from "../components/widgets/MusicWidget";
 import ShaderGroupSwitcher from "../components/ShaderGroupSwitcher";
-import { DEFAULT_PROJECT_FOLDERS } from "../constants/folders";
+import { DEFAULT_PROJECT_FOLDERS, DEFAULT_SVART_HULL_FILES, DEFAULT_VKHLAMOV_FILES } from "../constants/folders";
 
 class WindowErrorBoundary extends React.Component {
   constructor(props) {
@@ -330,9 +331,15 @@ export default function Desktop({ setStage, isLocked = false }) {
   }, [selectedItem, clipboard, isCutMode, allDesktopItems]);
 
 
+  const [previewImage, setPreviewImage] = useState(null);
+
   const handleItemDoubleClick = (item) => {
     if (item.type === "folder") {
       openApp("Finder", <Finder initialPath={`/icloud/${item.id}`} />);
+    } else if (item.type === "webloc") {
+      window.open(item.url, "_blank");
+    } else if (item.type === "image" || item.type === "video") {
+      setPreviewImage(item);
     } else if (item.type === "document" || item.name?.toLowerCase().endsWith(".txt")) {
       openApp("TextEdit", <TextEdit file={item} />);
     } else if (item.type === "pdf" || item.name?.toLowerCase().endsWith(".pdf")) {
@@ -493,6 +500,18 @@ export default function Desktop({ setStage, isLocked = false }) {
           alt="txt"
           className="w-14 h-14 drop-shadow-lg object-contain"
         />
+      );
+    }
+
+    if (item.type === "webloc") {
+      return (
+        <div className="w-14 h-14 flex items-center justify-center rounded-2xl overflow-hidden bg-gradient-to-br from-blue-400 to-blue-600 shadow-lg shrink-0 mb-1">
+          <svg viewBox="0 0 24 24" className="w-8 h-8" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="2" y1="12" x2="22" y2="12" />
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+          </svg>
+        </div>
       );
     }
 
@@ -842,6 +861,43 @@ export default function Desktop({ setStage, isLocked = false }) {
               </div>
             )}
             <span className="text-xs font-semibold">{toast.message}</span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Image/Video Lightbox */}
+      <AnimatePresence>
+        {previewImage && (previewImage.type === "image" || previewImage.type === "video") && (
+          <motion.div
+            className="fixed inset-0 z-[999999] flex items-center justify-center bg-black/80 backdrop-blur-sm"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setPreviewImage(null)}
+          >
+            <button
+              onClick={() => setPreviewImage(null)}
+              className="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition"
+            >
+              <X size={20} />
+            </button>
+            
+            {previewImage.type === "video" ? (
+              <video 
+                src={previewImage.url} 
+                controls 
+                autoPlay
+                className="max-w-[90vw] max-h-[85vh] rounded-xl shadow-2xl object-contain"
+                onClick={(e) => e.stopPropagation()}
+              />
+            ) : (
+              <img 
+                src={previewImage.url} 
+                alt={previewImage.name} 
+                className="max-w-[90vw] max-h-[85vh] rounded-xl shadow-2xl object-contain select-none"
+                onClick={(e) => e.stopPropagation()}
+              />
+            )}
           </motion.div>
         )}
       </AnimatePresence>

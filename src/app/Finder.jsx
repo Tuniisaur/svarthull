@@ -34,7 +34,7 @@ import {
   PanelLeft
 } from "lucide-react";
 
-import { DEFAULT_PROJECT_FOLDERS, DEFAULT_SVART_HULL_FILES } from "../constants/folders";
+import { DEFAULT_PROJECT_FOLDERS, DEFAULT_SVART_HULL_FILES, DEFAULT_VKHLAMOV_FILES } from "../constants/folders";
 
 // Mock folder icons
 const BLUE_FOLDER_URL = "https://s3.macosicons.com/macosicons/icons/GecwaBmkFQ/lowResPngFile_c3ef21fe8fabfd9d23fcc3ab3134dcf9_GecwaBmkFQ.png";
@@ -313,17 +313,23 @@ export default function Finder({ initialPath = "/icloud", windowId, maximized, i
       const filtered = parsed.filter(f => !oldIds.has(f.id));
       const existingNames = new Set(filtered.map(f => f.name?.toLowerCase()));
       const toAdd = DEFAULT_PROJECT_FOLDERS.filter(df => !existingNames.has(df.name.toLowerCase()));
-      // Inject default svart hull files if not already present
+      // Inject default svart hull and vkhlamov files if not already present
       const existingIds = new Set(filtered.map(f => f.id));
-      const filesToAdd = DEFAULT_SVART_HULL_FILES.filter(f => !existingIds.has(f.id));
-      if (toAdd.length > 0 || filesToAdd.length > 0) {
-        const merged = [...toAdd, ...filesToAdd, ...filtered];
+      const defaultProjectFiles = [...DEFAULT_SVART_HULL_FILES, ...DEFAULT_VKHLAMOV_FILES];
+      // Update any old /images/ paths for svart hull files if existing
+      const updatedExisting = filtered.map(f => {
+        const matchingDef = defaultProjectFiles.find(df => df.id === f.id);
+        return matchingDef ? { ...f, url: matchingDef.url } : f;
+      });
+      const filesToAdd = defaultProjectFiles.filter(f => !existingIds.has(f.id));
+      if (toAdd.length > 0 || filesToAdd.length > 0 || JSON.stringify(updatedExisting) !== JSON.stringify(filtered)) {
+        const merged = [...toAdd, ...filesToAdd, ...updatedExisting];
         localStorage.setItem("os_icloud_files", JSON.stringify(merged));
         return merged;
       }
-      return filtered;
+      return updatedExisting;
     } catch {
-      return [...DEFAULT_PROJECT_FOLDERS, ...DEFAULT_SVART_HULL_FILES];
+      return [...DEFAULT_PROJECT_FOLDERS, ...DEFAULT_SVART_HULL_FILES, ...DEFAULT_VKHLAMOV_FILES];
     }
   });
   const [documentsFiles, setDocumentsFiles] = useState(() => {

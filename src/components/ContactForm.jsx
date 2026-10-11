@@ -16,6 +16,8 @@ export default function ContactForm({ isDarkMode = true, onSuccess, className = 
 
   const [status, setStatus] = useState("idle"); // "idle" | "sending" | "success" | "error"
   const [errorMessage, setErrorMessage] = useState("");
+  const [honeyPot, setHoneyPot] = useState("");
+  const [mountTime] = useState(() => Date.now());
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -28,6 +30,14 @@ export default function ContactForm({ isDarkMode = true, onSuccess, className = 
     if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
       setStatus("error");
       setErrorMessage("Tutti i campi obbligatori (Nome, Email, Messaggio) devono essere compilati.");
+      return;
+    }
+
+    // Se l'honeypot è stato riempito, simula successo istantaneo
+    if (honeyPot.trim().length > 0) {
+      setStatus("success");
+      setFormData({ name: "", email: "", subject: "", message: "" });
+      if (onSuccess) onSuccess({ success: true });
       return;
     }
 
@@ -45,6 +55,8 @@ export default function ContactForm({ isDarkMode = true, onSuccess, className = 
           email: formData.email.trim(),
           subject: formData.subject.trim(),
           message: formData.message.trim(),
+          _gotcha: honeyPot,
+          _ts: mountTime,
         }),
       });
 
@@ -188,6 +200,20 @@ export default function ContactForm({ isDarkMode = true, onSuccess, className = 
               ? "bg-white/5 border-white/10 text-white focus:border-[#007AFF] focus:bg-white/10"
               : "bg-neutral-50 border-neutral-300 text-neutral-900 focus:border-[#007AFF] focus:bg-white"
           }`}
+        />
+      </div>
+
+      {/* Antispam Honeypot Field */}
+      <div className="absolute opacity-0 -z-10 pointer-events-none select-none h-0 w-0 overflow-hidden" aria-hidden="true" tabIndex={-1}>
+        <label htmlFor="contact-hp-website">Leave this field blank</label>
+        <input
+          id="contact-hp-website"
+          type="text"
+          name="_gotcha"
+          value={honeyPot}
+          onChange={(e) => setHoneyPot(e.target.value)}
+          tabIndex={-1}
+          autoComplete="off"
         />
       </div>
 

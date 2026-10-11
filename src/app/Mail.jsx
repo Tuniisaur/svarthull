@@ -64,6 +64,8 @@ export default function ContactMe({ windowId }) {
   const [errorMessage, setErrorMessage] = useState("");
   const [copiedEmail, setCopiedEmail] = useState(false);
 
+  const [honeyPot, setHoneyPot] = useState("");
+  const formMountTime = useRef(Date.now());
   const textareaRef = useRef(null);
   const targetEmail = "svarthulldev@proton.me";
 
@@ -76,6 +78,12 @@ export default function ContactMe({ windowId }) {
   const handleSubmit = async (e) => {
     if (e) e.preventDefault();
     if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
+      return;
+    }
+
+    // Se l'honeypot è stato riempito da un bot automatico, simula successo senza inviare
+    if (honeyPot.trim().length > 0) {
+      setStatus("sent");
       return;
     }
 
@@ -93,6 +101,8 @@ export default function ContactMe({ windowId }) {
           email: formData.email.trim(),
           subject: formData.subject.trim(),
           message: formData.message.trim(),
+          _gotcha: honeyPot,
+          _ts: formMountTime.current,
         }),
       });
 
@@ -392,6 +402,19 @@ export default function ContactMe({ windowId }) {
               style={{ minHeight: "140px" }}
             />
 
+            {/* Antispam Honeypot Field (nascosto agli utenti umani) */}
+            <div className="absolute opacity-0 -z-10 pointer-events-none select-none h-0 w-0 overflow-hidden" aria-hidden="true" tabIndex={-1}>
+              <label htmlFor="mail-hp-website">Leave this field blank</label>
+              <input
+                id="mail-hp-website"
+                type="text"
+                name="_gotcha"
+                value={honeyPot}
+                onChange={(e) => setHoneyPot(e.target.value)}
+                tabIndex={-1}
+                autoComplete="off"
+              />
+            </div>
           </div>
 
           {/* 4. Apple Mail Footer Bar */}

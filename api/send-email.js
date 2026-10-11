@@ -20,7 +20,28 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { name, email, subject, message } = req.body || {};
+    const { name, email, subject, message, _gotcha, _ts } = req.body || {};
+
+    // Controllo antispam 1: Honeypot field (se compilato da un bot, rifiuta silenziosamente)
+    if (_gotcha && String(_gotcha).trim().length > 0) {
+      console.warn("[send-email] Spam bot intercettato tramite honeypot.");
+      return res.status(200).json({
+        success: true,
+        message: "Email inviata con successo!",
+      });
+    }
+
+    // Controllo antispam 2: Invio troppo rapido (timestamp bot check: < 2.5s)
+    if (_ts && typeof _ts === "number") {
+      const timeElapsed = Date.now() - _ts;
+      if (timeElapsed < 2500) {
+        console.warn("[send-email] Invio sospetto troppo rapido:", timeElapsed, "ms");
+        return res.status(200).json({
+          success: true,
+          message: "Email inviata con successo!",
+        });
+      }
+    }
 
     // Validazione campi obbligatori
     if (!name || !email || !message) {

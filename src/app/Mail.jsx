@@ -392,11 +392,6 @@ export default function ContactMe({ windowId }) {
               style={{ minHeight: "140px" }}
             />
 
-            {/* Apple Mail Signature preview */}
-            <div className="pt-4 border-t border-dashed border-black/10 dark:border-white/10 mt-4 text-xs text-gray-400/80 select-none">
-              <p>--</p>
-              <p>Sent from macOS Web Simulator</p>
-            </div>
           </div>
 
           {/* 4. Apple Mail Footer Bar */}
